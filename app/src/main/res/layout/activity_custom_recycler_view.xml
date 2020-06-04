@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/icon"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:text="아이디 : "
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/icon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"/>/>
+    <TextView
+        android:id="@+id/insert_id"
+        android:text="샘플 아이디"
+        android:textSize="15dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/tv_id"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/tv_opening_price"
+        android:text="시가 : "
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/icon"
+        app:layout_constraintTop_toBottomOf="@+id/insert_id"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/tv_low_price"
+        android:text="저가 : "
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_opening_price"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/insert_opening_price"
+        android:text="1111111111"
+        android:textSize="15dp"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/tv_opening_price"
+        app:layout_constraintTop_toBottomOf="@+id/insert_id"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/insert_low_price"
+        android:text="1111111111"
+        android:textSize="15dp"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/tv_opening_price"
+        app:layout_constraintTop_toBottomOf="@+id/insert_opening_price"/>
+
+    <TextView
+        android:id="@+id/tv_closing_price"
+        android:text="종가 : "
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/insert_opening_price"
+        app:layout_constraintTop_toBottomOf="@+id/insert_id"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_high_price"
+        android:text="고가 : "
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/insert_low_price"
+        app:layout_constraintTop_toBottomOf="@+id/tv_opening_price"/>
+
+    <TextView
+        android:id="@+id/insert_closing_price"
+        android:text="1111111111"
+        android:textSize="15dp"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/tv_closing_price"
+        app:layout_constraintTop_toBottomOf="@+id/insert_id"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/insert_high_price"
+        android:text="1111111111"
+        android:textSize="15dp"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/tv_high_price"
+        app:layout_constraintTop_toBottomOf="@+id/insert_opening_price"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
