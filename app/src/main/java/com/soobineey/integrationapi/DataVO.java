@@ -9,8 +9,6 @@ public class DataVO {
     private String lowPrice;
     private String highPrice;
 
-    private boolean flag = false;
-
     public int getImg() {
         return img;
     }
@@ -28,7 +26,8 @@ public class DataVO {
     }
 
     public String getOpeningPrice() {
-        return openingPrice;
+        final float newOpeningPrice = Float.valueOf(openingPrice);
+        return String.format("%.2f", newOpeningPrice);
     }
 
     public void setOpeningPrice(String openingPrice) {
@@ -57,14 +56,6 @@ public class DataVO {
 
     public void setHighPrice(String highPrice) {
         this.highPrice = highPrice;
-    }
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 
     public DataVO(int img, String id, String openingPrice, String closingPrice, String lowPrice, String highPrice) {

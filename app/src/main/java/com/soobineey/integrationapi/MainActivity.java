@@ -1,5 +1,6 @@
 package com.soobineey.integrationapi;
 
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,7 +10,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private ArrayList<DataVO> arrayList;
+    private boolean flag = false;
+    private DataVO dataVO;
+    private DataVO vo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,32 +23,37 @@ public class MainActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
 
-        DataVO dataVO = new DataVO();
-        CoinoneInfo.PriceThread priceThread = new CoinoneInfo.PriceThread();
-        priceThread.start();
+        CoinoneInfo.ConinoneThread coninoneThread = new CoinoneInfo.ConinoneThread();
+        coninoneThread.start();
         while (true) {
-            if (dataVO.isFlag()) {
+            if (coninoneThread.flag) {
                 break;
             }
         }
+        dataVO = coninoneThread.vo;
+        vo = new DataVO(dataVO.getImg(), dataVO.getId(), dataVO.getOpeningPrice(), dataVO.getClosingPrice(), dataVO.getLowPrice(), dataVO.getHighPrice());
+        arrayList.add(vo);
 
-        CoinoneInfo.EmailThread emailThread = new CoinoneInfo.EmailThread();
-        emailThread.start();
+        BitsonicInfo.BitsonicThread bitsonicThread = new BitsonicInfo.BitsonicThread();
+        bitsonicThread.start();
         while (true) {
-            if (dataVO.isFlag()) {
+            if (bitsonicThread.flag) {
                 break;
             }
         }
-
-
-
-        DataVO vo = new DataVO(dataVO.getImg(), dataVO.getId(), dataVO.getOpeningPrice(), dataVO.getClosingPrice(), dataVO.getLowPrice(), dataVO.getHighPrice());
+        dataVO = bitsonicThread.vo;
+        vo = new DataVO(dataVO.getImg(), dataVO.getId(), dataVO.getOpeningPrice(), dataVO.getClosingPrice(), dataVO.getLowPrice(), dataVO.getHighPrice());
         arrayList.add(vo);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Adapter adapter = new Adapter(arrayList);
+//        Adapter adapter = new Adapter(arrayList, this);
         recyclerView.setAdapter(adapter);
+    }
+
+    public void setFlag(boolean newFlag) {
+        flag = newFlag;
     }
 }
