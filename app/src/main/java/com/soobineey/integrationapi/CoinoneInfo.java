@@ -1,6 +1,5 @@
 package com.soobineey.integrationapi;
 
-import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -11,50 +10,49 @@ import java.net.URL;
 public class CoinoneInfo {
 
   static class ConinoneThread extends Thread {
-    private String ACCESS_TOKEN = "f51a7cad-503a-47b6-9acd-9078808175de";
-    private String priceAPI = "https://api.coinone.co.kr";
-    private URL url = null;
+    private String CONINONE_API_KEY = "f51a7cad-503a-47b6-9acd-9078808175de";
+    private String CO_COMM_URL = "https://api.coinone.co.kr";
+    private URL coOpenConnector = null;
 
-    public DataVO vo = new DataVO();
-    public boolean flag = false;
+    public DataVO coResultDataVO = new DataVO();
+    public boolean coBCheckThreadFlag = false;
 
     @Override
     public void run() {
       try {
         // Get Price
-        String api = "/ticker/";
-        String sendURL = priceAPI + api;
-        url = new URL(sendURL);
+        String coUrlTail = "/ticker/";
+        String coSendURL = CO_COMM_URL + coUrlTail;
+        coOpenConnector = new URL(coSendURL);
 
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
+        HttpURLConnection coHttpConn = (HttpURLConnection) coOpenConnector.openConnection();
+        coHttpConn.setRequestMethod("GET");
 
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        BufferedReader coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
 
-        String result = bufferedReader.readLine();
+        String coSResultLastData = coResultDataBufferedReader.readLine();
 
-        JSONObject jsonObject = new JSONObject(result);
+        JSONObject jsonObject = new JSONObject(coSResultLastData);
 
-        vo.setOpeningPrice(jsonObject.getString("first"));
-        vo.setClosingPrice(jsonObject.getString("last"));
-        vo.setHighPrice(jsonObject.getString("high"));
-        vo.setLowPrice(jsonObject.getString("low"));
+        coResultDataVO.setOpeningPrice(jsonObject.getString("first"));
+        coResultDataVO.setClosingPrice(jsonObject.getString("last"));
+        coResultDataVO.setHighPrice(jsonObject.getString("high"));
+        coResultDataVO.setLowPrice(jsonObject.getString("low"));
 
         // Get Mail
-        api = "/v1/account/user_info";
-        sendURL = priceAPI + api + "?access_token=" + ACCESS_TOKEN;
-        url = new URL(sendURL);
+        coUrlTail = "/v1/account/user_info";
+        coSendURL = CO_COMM_URL + coUrlTail + "?access_token=" + CONINONE_API_KEY;
+        coOpenConnector = new URL(coSendURL);
 
-        con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
+        coHttpConn = (HttpURLConnection) coOpenConnector.openConnection();
+        coHttpConn.setRequestMethod("GET");
 
-        bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
 
-        result = bufferedReader.readLine();
-        System.out.println("정보 : " + result);
+        coSResultLastData = coResultDataBufferedReader.readLine();
 
         // 단계별로 구분 되어있는 json형태에서 id까지 찾아 들어간다.
-        jsonObject = new JSONObject(result);
+        jsonObject = new JSONObject(coSResultLastData);
         String userInfo = jsonObject.getString("userInfo");
 
         jsonObject = new JSONObject(userInfo);
@@ -62,11 +60,10 @@ public class CoinoneInfo {
 
         JSONObject emailObject = new JSONObject(emailInfo);
 
-        vo.setId(emailObject.getString("email"));
-        vo.setImg(R.drawable.coinone);
+        coResultDataVO.setId(emailObject.getString("email"));
+        coResultDataVO.setImg(R.drawable.coinone);
 
-        flag = true;
-        Log.v("CoinoneInfo", "try-catch 마지막 줄");
+        coBCheckThreadFlag = true;
 
       } catch (Exception e) {
         e.printStackTrace();

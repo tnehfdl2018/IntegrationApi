@@ -11,44 +11,44 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
 
-    private ArrayList<DataVO> arrayList;
+    private ArrayList<DataVO> showDataArrayList;
     private boolean flag = false;
-    private DataVO dataVO;
-    private DataVO vo;
+    private DataVO getDataVO;
+    private DataVO putDataVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        arrayList = new ArrayList<>();
+        showDataArrayList = new ArrayList<>();
 
         CoinoneInfo.ConinoneThread coninoneThread = new CoinoneInfo.ConinoneThread();
         coninoneThread.start();
         while (true) {
-            if (coninoneThread.flag) {
+            if (coninoneThread.coBCheckThreadFlag) {
                 break;
             }
         }
-        dataVO = coninoneThread.vo;
-        vo = new DataVO(dataVO.getImg(), dataVO.getId(), dataVO.getOpeningPrice(), dataVO.getClosingPrice(), dataVO.getLowPrice(), dataVO.getHighPrice());
-        arrayList.add(vo);
+        getDataVO = coninoneThread.coResultDataVO;
+        putDataVO = new DataVO(getDataVO.getImg(), getDataVO.getId(), getDataVO.getOpeningPrice(), getDataVO.getClosingPrice(), getDataVO.getLowPrice(), getDataVO.getHighPrice());
+        showDataArrayList.add(putDataVO);
 
         BitsonicInfo.BitsonicThread bitsonicThread = new BitsonicInfo.BitsonicThread();
         bitsonicThread.start();
         while (true) {
-            if (bitsonicThread.flag) {
+            if (bitsonicThread.bCheckThreadFlag) {
                 break;
             }
         }
-        dataVO = bitsonicThread.vo;
-        vo = new DataVO(dataVO.getImg(), dataVO.getId(), dataVO.getOpeningPrice(), dataVO.getClosingPrice(), dataVO.getLowPrice(), dataVO.getHighPrice());
-        arrayList.add(vo);
+        getDataVO = bitsonicThread.resultDataVO;
+        putDataVO = new DataVO(getDataVO.getImg(), getDataVO.getId(), getDataVO.getOpeningPrice(), getDataVO.getClosingPrice(), getDataVO.getLowPrice(), getDataVO.getHighPrice());
+        showDataArrayList.add(putDataVO);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Adapter adapter = new Adapter(arrayList);
+        Adapter adapter = new Adapter(showDataArrayList);
 //        Adapter adapter = new Adapter(arrayList, this);
         recyclerView.setAdapter(adapter);
     }
