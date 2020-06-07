@@ -1,5 +1,6 @@
 package com.soobineey.integrationapi;
 
+import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -10,16 +11,23 @@ import java.net.URL;
 public class CoinoneInfo {
 
   static class ConinoneThread extends Thread {
+    // 서버 연결용 데이터
     private String CONINONE_API_KEY = "f51a7cad-503a-47b6-9acd-9078808175de";
     private String CO_COMM_URL = "https://api.coinone.co.kr";
     private URL coOpenConnector = null;
 
+    // 받아온 데이터 가공용
     public DataVO coResultDataVO = new DataVO();
+
+    // 스레드가 끝났는지 끝나지 않았는지 판단하는 플래그 (진행중 - false, 종료 - true)
     public boolean coBCheckThreadFlag = false;
+
+    private String TAG = "CoinoneInfo";
 
     @Override
     public void run() {
       try {
+
         // Get Price
         String coUrlTail = "/ticker/";
         String coSendURL = CO_COMM_URL + coUrlTail;
@@ -33,6 +41,7 @@ public class CoinoneInfo {
         String coSResultLastData = coResultDataBufferedReader.readLine();
 
         JSONObject jsonObject = new JSONObject(coSResultLastData);
+
 
         coResultDataVO.setOpeningPrice(jsonObject.getString("first"));
         coResultDataVO.setClosingPrice(jsonObject.getString("last"));

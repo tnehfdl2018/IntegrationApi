@@ -26,8 +26,9 @@ public class DataVO {
     }
 
     public String getOpeningPrice() {
-        final float fLimitNumberOpeningprice = Float.valueOf(openingPrice);
-        return String.format("%.2f", fLimitNumberOpeningprice);
+        return openingPrice;
+//        final float fLimitNumberOpeningprice = Float.valueOf(openingPrice);
+//        return String.format("%.2f", fLimitNumberOpeningprice);
     }
 
     public void setOpeningPrice(String openingPrice) {
@@ -35,8 +36,9 @@ public class DataVO {
     }
 
     public String getClosingPrice() {
-        final float fLimitNumberClosingprice = Float.valueOf(closingPrice);
-        return String.format("%.2f", fLimitNumberClosingprice);
+        return closingPrice;
+//        final float fLimitNumberClosingprice = Float.valueOf(closingPrice);
+//        return String.format("%.2f", fLimitNumberClosingprice);
     }
 
     public void setClosingPrice(String closingPrice) {
@@ -44,8 +46,9 @@ public class DataVO {
     }
 
     public String getLowPrice() {
-        final float fLimitNumberLowprice = Float.valueOf(lowPrice);
-        return String.format("%.2f", fLimitNumberLowprice);
+        return lowPrice;
+//        final float fLimitNumberLowprice = Float.valueOf(lowPrice);
+//        return String.format("%.2f", fLimitNumberLowprice);
     }
 
     public void setLowPrice(String lowPrice) {
@@ -53,8 +56,9 @@ public class DataVO {
     }
 
     public String getHighPrice() {
-        final float fLimitNumberHighprice = Float.valueOf(highPrice);
-        return String.format("%.2f", fLimitNumberHighprice);
+        return highPrice;
+//        final float fLimitNumberHighprice = Float.valueOf(highPrice);
+//        return String.format("%.2f", fLimitNumberHighprice);
     }
 
     public void setHighPrice(String highPrice) {

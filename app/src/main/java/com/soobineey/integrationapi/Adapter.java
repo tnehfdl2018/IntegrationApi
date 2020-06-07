@@ -13,17 +13,12 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private ArrayList<DataVO> arrayList = new ArrayList();
-//    private MainActivity activtyContext;
+    public ArrayList<DataVO> arrayList = new ArrayList();
     private Context context;
 
     public Adapter(ArrayList<DataVO> arrayList) {
         this.arrayList = arrayList;
     }
-//    public Adapter(ArrayList<DataVO> arrayList, MainActivity context) {
-//        this.arrayList = arrayList;
-//        this.activtyContext = context;
-//    }
 
     @NonNull
     @Override
@@ -46,7 +41,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         TextView lowPrice = holder.itemView.findViewById(R.id.insert_low_price);
         TextView highPrice = holder.itemView.findViewById(R.id.insert_high_price);
 
-//        image.setImageDrawable(activtyContext.getDrawable(arrayList.get(position).getImg()));
         image.setImageDrawable(context.getDrawable(arrayList.get(position).getImg()));
         id.setText(arrayList.get(position).getId());
         openingPrice.setText(arrayList.get(position).getOpeningPrice());
