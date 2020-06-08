@@ -40,6 +40,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         TextView closingPrice = holder.itemView.findViewById(R.id.insert_closing_price);
         TextView lowPrice = holder.itemView.findViewById(R.id.insert_low_price);
         TextView highPrice = holder.itemView.findViewById(R.id.insert_high_price);
+        TextView tradeVolume = holder.itemView.findViewById(R.id.insert_trade_volume);
+        TextView tradePrice = holder.itemView.findViewById(R.id.insert_trade_price);
+        TextView averagePrice = holder.itemView.findViewById(R.id.insert_average_price);
 
         image.setImageDrawable(context.getDrawable(arrayList.get(position).getImg()));
         id.setText(arrayList.get(position).getId());
@@ -47,6 +50,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         closingPrice.setText(arrayList.get(position).getClosingPrice());
         lowPrice.setText(arrayList.get(position).getLowPrice());
         highPrice.setText(arrayList.get(position).getHighPrice());
+        tradeVolume.setText(arrayList.get(position).getTradeVolume());
+        tradePrice.setText(arrayList.get(position).getTradePrice());
+        averagePrice.setText(arrayList.get(position).getAverage());
     }
 
     @Override

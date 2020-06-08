@@ -58,12 +58,22 @@ public class BithumbInfo {
         bitResultDataVO.setLowPrice(bitDataInPriceInformation.getString("min_price"));
         bitResultDataVO.setHighPrice(bitDataInPriceInformation.getString("max_price"));
 
-//        Log.e("제이슨 ", json);
-//        System.out.println(json);
+        String bitTodayTotalVolume = bitDataInPriceInformation.getString("units_traded_24H");
+        String bitTodayTotalPrice = bitDataInPriceInformation.getString("acc_trade_value_24H");
+
+        bitResultDataVO.setTradeVolume(String.format("%.2f", Double.valueOf(bitTodayTotalVolume)));
+        bitResultDataVO.setTradePrice(String.format("%.2f", Double.valueOf(bitTodayTotalPrice)));
+
+        Double bitTotalAverage = Double.valueOf(bitTodayTotalPrice) / Double.valueOf(bitTodayTotalVolume);
+
+        bitResultDataVO.setAverage(String.valueOf(bitTotalAverage));
+
+        Log.e("비트썸 ", bitTodayTotalVolume);
+        Log.e("비트썸 ", bitTodayTotalPrice);
+        Log.e("비트썸 ", String.valueOf(bitTotalAverage));
+
 
         String result = api_client.callApi("/info/account", bitHeader);
-//        Log.e("결과 값 ", result);
-        System.out.println(result);
         Log.e("빗썸", "데이터 조회");
 
         JSONObject bitIdInformaionObject = new JSONObject(result);
