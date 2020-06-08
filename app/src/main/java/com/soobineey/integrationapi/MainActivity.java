@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<DataVO> showDataArrayList;
-    private boolean flag = false; // 첫 실행인지 refresh인지 구분하는 플래그
+    private boolean refreshFlag = false; // 첫 실행인지 refresh인지 구분하는 플래그
     private FloatingActionButton floatBtn;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
     // 자동 갱신 메소드
     public void AutoRefresh() {
-        flag = true;
-        Log.e(TAG, "Auto refresh");
+        refreshFlag = true;
 //        bitsonicLookup();
         coinoneLookup();
         bithumbLookup();
+        Log.e(TAG, "Auto refresh");
 
         adapter.notifyDataSetChanged();
         handler.postDelayed(new Runnable() {
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener clickRefresh = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            flag = true;
+            refreshFlag = true;
 //            bitsonicLookup();
             coinoneLookup();
             bithumbLookup();
@@ -93,16 +93,18 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout.OnRefreshListener swipeRefresh = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            flag = true;
+            refreshFlag = true;
 //            bitsonicLookup();
             coinoneLookup();
             bithumbLookup();
             Log.e(TAG, "swipe refresh");
-            swipeRefreshLayout.setRefreshing(false); // 로딩빙글빙글 해제
+
+            swipeRefreshLayout.setRefreshing(false); // 로딩 빙글빙글 해제
 
             adapter.notifyDataSetChanged();
         }
     };
+
     // 비트소닉
     public void bitsonicLookup() {
         // 데이터를 받아오기 위한 스레드 생성 및 실행
@@ -123,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
         bitsonicPutDataVO.setClosingPrice(bitsonicThread.bsResultDataVO.getClosingPrice());
         bitsonicPutDataVO.setLowPrice(bitsonicThread.bsResultDataVO.getLowPrice());
         bitsonicPutDataVO.setHighPrice(bitsonicThread.bsResultDataVO.getHighPrice());
-        if (flag) {
+
+        if (refreshFlag) {
             adapter.arrayList.set(0, bitsonicPutDataVO);
 //            showDataArrayList.set(0, bitsonicPutDataVO);
             Log.v(TAG, "셋임");
@@ -155,8 +158,7 @@ public class MainActivity extends AppCompatActivity {
         coinonePutDataVO.setLowPrice(coinoneThread.coResultDataVO.getLowPrice());
         coinonePutDataVO.setHighPrice(coinoneThread.coResultDataVO.getHighPrice());
 
-        if (flag) {
-            Log.e("클라 일번 ", coinonePutDataVO.getId());
+        if (refreshFlag) {
             adapter.arrayList.set(0, coinonePutDataVO);
 //            adapter.arrayList.set(1, coinonePutDataVO);
             Log.e(TAG, "셋임");
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         while (true) {
             Log.v(TAG, "작동중");
             if (bithumbThread.bitBCheckThreadFlag) {
+                bithumbThread.bitBCheckThreadFlag = false;
                 break;
             }
         }
@@ -187,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         bithumbPutDataVO.setLowPrice(bithumbThread.bitResultDataVO.getLowPrice());
         bithumbPutDataVO.setHighPrice(bithumbThread.bitResultDataVO.getHighPrice());
 
-        if (flag) {
+        if (refreshFlag) {
             adapter.arrayList.set(1, bithumbPutDataVO);
 //            adapter.arrayList.set(2, bithumbPutDataVO);
             Log.e(TAG, "셋임");

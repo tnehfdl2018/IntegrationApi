@@ -37,6 +37,7 @@ public class CoinoneInfo {
         coHttpConn.setRequestMethod("GET");
 
         BufferedReader coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
+        Log.e("코인원 ", "가격정보");
 
         String coSResultLastData = coResultDataBufferedReader.readLine();
 
@@ -57,6 +58,7 @@ public class CoinoneInfo {
         coHttpConn.setRequestMethod("GET");
 
         coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
+        Log.e("코인원 ", "아이디");
 
         coSResultLastData = coResultDataBufferedReader.readLine();
 
