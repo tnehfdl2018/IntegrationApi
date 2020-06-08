@@ -30,7 +30,8 @@ public class CoinoneInfo {
 
         // Get Price
         String coUrlTail = "/ticker/";
-        String coSendURL = CO_COMM_URL + coUrlTail;
+        String coUrlParam = "?currency=redi";
+        String coSendURL = CO_COMM_URL + coUrlTail + coUrlParam;
         coOpenConnector = new URL(coSendURL);
 
         HttpURLConnection coHttpConn = (HttpURLConnection) coOpenConnector.openConnection();
@@ -48,6 +49,13 @@ public class CoinoneInfo {
         coResultDataVO.setClosingPrice(jsonObject.getString("last"));
         coResultDataVO.setHighPrice(jsonObject.getString("high"));
         coResultDataVO.setLowPrice(jsonObject.getString("low"));
+
+        String coTodayLastPrice = jsonObject.getString("last");
+        String coTodayLastVolume = jsonObject.getString("volume");
+
+        int coTodayAverage = Integer.valueOf(coTodayLastVolume) / Integer.valueOf(coTodayLastPrice);
+
+        coResultDataVO.setAverage(String.valueOf(coTodayAverage));
 
         // Get Mail
         coUrlTail = "/v1/account/user_info";

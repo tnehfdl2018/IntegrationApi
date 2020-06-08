@@ -8,6 +8,7 @@ public class DataVO {
     private String closingPrice;
     private String lowPrice;
     private String highPrice;
+    private String average;
 
     public int getImg() {
         return img;
@@ -65,16 +66,11 @@ public class DataVO {
         this.highPrice = highPrice;
     }
 
-    public DataVO(int img, String id, String openingPrice, String closingPrice, String lowPrice, String highPrice) {
-        this.img = img;
-        this.id = id;
-        this.openingPrice = openingPrice;
-        this.closingPrice = closingPrice;
-        this.lowPrice = lowPrice;
-        this.highPrice = highPrice;
+    public String getAverage() {
+        return average;
     }
 
-    public DataVO() {
-
+    public void setAverage(String average) {
+        this.average = average;
     }
 }

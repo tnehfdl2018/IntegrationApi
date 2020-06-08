@@ -42,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
         // 각 사이트 데이터를 가져오는 메소드
 //        bitsonicLookup();
 //        Log.e("TAG", "비트소닉 통과");
+        bithumbLookup();
         coinoneLookup();
         Log.e("TAG", "코인원 통과");
-        bithumbLookup();
+
         Log.e("TAG", "빗썸 통과");
 
         // 리사이클러뷰 생성
