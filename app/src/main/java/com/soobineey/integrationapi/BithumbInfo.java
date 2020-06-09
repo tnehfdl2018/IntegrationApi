@@ -1,6 +1,5 @@
 package com.soobineey.integrationapi;
 
-import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
