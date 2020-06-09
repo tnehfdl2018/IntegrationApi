@@ -8,6 +8,8 @@ public class DataVO {
     private String closingPrice;
     private String lowPrice;
     private String highPrice;
+    private String tradeVolume;
+    private String tradePrice;
     private String average;
 
     public int getImg() {
@@ -64,6 +66,22 @@ public class DataVO {
 
     public void setHighPrice(String highPrice) {
         this.highPrice = highPrice;
+    }
+
+    public String getTradeVolume() {
+        return tradeVolume;
+    }
+
+    public void setTradeVolume(String tradeVolume) {
+        this.tradeVolume = tradeVolume;
+    }
+
+    public String getTradePrice() {
+        return tradePrice;
+    }
+
+    public void setTradePrice(String tradePrice) {
+        this.tradePrice = tradePrice;
     }
 
     public String getAverage() {

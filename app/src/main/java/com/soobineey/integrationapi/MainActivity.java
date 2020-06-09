@@ -126,6 +126,9 @@ public class MainActivity extends AppCompatActivity {
         bitsonicPutDataVO.setClosingPrice(bitsonicThread.bsResultDataVO.getClosingPrice());
         bitsonicPutDataVO.setLowPrice(bitsonicThread.bsResultDataVO.getLowPrice());
         bitsonicPutDataVO.setHighPrice(bitsonicThread.bsResultDataVO.getHighPrice());
+        bitsonicPutDataVO.setTradeVolume(bitsonicThread.bsResultDataVO.getTradeVolume());
+        bitsonicPutDataVO.setTradePrice(bitsonicThread.bsResultDataVO.getTradePrice());
+        bitsonicPutDataVO.setAverage(bitsonicThread.bsResultDataVO.getAverage());
 
         if (refreshFlag) {
             adapter.arrayList.set(0, bitsonicPutDataVO);
@@ -158,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
         coinonePutDataVO.setClosingPrice(coinoneThread.coResultDataVO.getClosingPrice());
         coinonePutDataVO.setLowPrice(coinoneThread.coResultDataVO.getLowPrice());
         coinonePutDataVO.setHighPrice(coinoneThread.coResultDataVO.getHighPrice());
+        coinonePutDataVO.setTradeVolume(coinoneThread.coResultDataVO.getTradeVolume());
+        coinonePutDataVO.setTradePrice(coinoneThread.coResultDataVO.getTradePrice());
+        coinonePutDataVO.setAverage(coinoneThread.coResultDataVO.getAverage());
 
         if (refreshFlag) {
             adapter.arrayList.set(0, coinonePutDataVO);
@@ -190,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
         bithumbPutDataVO.setClosingPrice(bithumbThread.bitResultDataVO.getClosingPrice());
         bithumbPutDataVO.setLowPrice(bithumbThread.bitResultDataVO.getLowPrice());
         bithumbPutDataVO.setHighPrice(bithumbThread.bitResultDataVO.getHighPrice());
+        bithumbPutDataVO.setTradeVolume(bithumbThread.bitResultDataVO.getTradeVolume());
+        bithumbPutDataVO.setTradePrice(bithumbThread.bitResultDataVO.getTradePrice());
+        bithumbPutDataVO.setAverage(bithumbThread.bitResultDataVO.getAverage());
 
         if (refreshFlag) {
             adapter.arrayList.set(1, bithumbPutDataVO);

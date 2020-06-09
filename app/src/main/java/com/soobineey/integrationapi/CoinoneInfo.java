@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 
 public class CoinoneInfo {
 
@@ -32,6 +33,7 @@ public class CoinoneInfo {
         String coUrlTail = "/ticker/";
         String coUrlParam = "?currency=redi";
         String coSendURL = CO_COMM_URL + coUrlTail + coUrlParam;
+//        String coSendURL = CO_COMM_URL + coUrlTail;
         coOpenConnector = new URL(coSendURL);
 
         HttpURLConnection coHttpConn = (HttpURLConnection) coOpenConnector.openConnection();
@@ -53,9 +55,21 @@ public class CoinoneInfo {
         String coTodayLastPrice = jsonObject.getString("last");
         String coTodayLastVolume = jsonObject.getString("volume");
 
-        int coTodayAverage = Integer.valueOf(coTodayLastVolume) / Integer.valueOf(coTodayLastPrice);
+        String coSTodayLastPrice = String.format("%.2f", Double.valueOf(coTodayLastPrice));
+        String coSodayLastPrice = String.format("%.2f", Double.valueOf(coTodayLastVolume));
 
+        coResultDataVO.setTradePrice(coSTodayLastPrice);
+        coResultDataVO.setTradeVolume(coSodayLastPrice);
+
+        Double coTodayAverage = Double.valueOf(coTodayLastPrice) / Double.valueOf(coTodayLastVolume);
+
+//        String testAverage = String.valueOf(Math.round(coTodayAverage *100) / 100.0);
+//        coResultDataVO.setAverage(testAverage);
         coResultDataVO.setAverage(String.valueOf(coTodayAverage));
+
+        Log.e("코인원 ", coTodayLastVolume);
+        Log.e("코인원 ", coTodayLastPrice);
+        Log.e("코인원 ", String.valueOf(coTodayAverage));
 
         // Get Mail
         coUrlTail = "/v1/account/user_info";
