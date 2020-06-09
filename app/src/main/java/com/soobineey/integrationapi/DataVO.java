@@ -40,8 +40,6 @@ public class DataVO {
 
     public String getClosingPrice() {
         return closingPrice;
-//        final float fLimitNumberClosingprice = Float.valueOf(closingPrice);
-//        return String.format("%.2f", fLimitNumberClosingprice);
     }
 
     public void setClosingPrice(String closingPrice) {
@@ -50,8 +48,6 @@ public class DataVO {
 
     public String getLowPrice() {
         return lowPrice;
-//        final float fLimitNumberLowprice = Float.valueOf(lowPrice);
-//        return String.format("%.2f", fLimitNumberLowprice);
     }
 
     public void setLowPrice(String lowPrice) {

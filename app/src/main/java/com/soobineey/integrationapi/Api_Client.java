@@ -53,8 +53,7 @@ public class Api_Client {
   public static byte[] hmacSha512(String value, String key) {
     try {
       SecretKeySpec keySpec = new SecretKeySpec(
-          key.getBytes(DEFAULT_ENCODING),
-          HMAC_SHA512);
+          key.getBytes(DEFAULT_ENCODING), HMAC_SHA512);
 
       Mac mac = Mac.getInstance(HMAC_SHA512);
       mac.init(keySpec);
@@ -98,13 +97,11 @@ public class Api_Client {
     } else {
       HttpRequest request = null;
 
-      // POST/GET ����
+
       if (strMemod.toUpperCase().equals("POST")) {
 
         request = new HttpRequest(strHost, "POST");
         request.readTimeout(10000);
-
-        System.out.println("POST ==> " + request.url());
 
         if (httpHeaders != null && !httpHeaders.isEmpty()) {
           httpHeaders.put("api-client-type", "2");
@@ -113,21 +110,17 @@ public class Api_Client {
         }
         if (rgParams != null && !rgParams.isEmpty()) {
           request.form(rgParams);
-          System.out.println(rgParams.toString());
         }
       } else {
         request = HttpRequest.get(strHost
             + Util.mapToQueryString(rgParams));
         request.readTimeout(10000);
-
-        System.out.println("Response was: " + response);
       }
 
       if (request.ok()) {
         response = request.body();
       } else {
-        response = "error : " + request.code() + ", message : "
-            + request.body();
+        response = "error : " + request.code() + ", message : " + request.body();
       }
       request.disconnect();
     }
@@ -151,7 +144,6 @@ public class Api_Client {
 
 
     String str = endpoint + ";" + strData + ";" + nNonce;
-    //String str = "/info/balance;order_currency=BTC&payment_currency=KRW&endpoint=%2Finfo%2Fbalance;272184496";
 
     String encoded = asHex(hmacSha512(str, apiSecret));
 
@@ -184,11 +176,7 @@ public class Api_Client {
       // json �Ľ�
       HashMap<String, String> result;
       try {
-        result = new ObjectMapper().readValue(rgResultDecode,
-            HashMap.class);
-
-        System.out.println("==== ��� ��� ====");
-        System.out.println(result.get("status"));
+        result = new ObjectMapper().readValue(rgResultDecode, HashMap.class);
       } catch (IOException e) {
         e.printStackTrace();
       }

@@ -32,7 +32,6 @@ public class BitsonicInfo {
     
     // 받아온 데이터 가공용
     public DataVO bsResultDataVO = new DataVO();
-    private JSONObject jsonObject;
     private String sResultBiganData;
     private String sResultLastData;
 
@@ -66,19 +65,19 @@ public class BitsonicInfo {
 
         sResultBiganData = btResultDatabufferedReader.lines().collect(Collectors.joining());
 
-        jsonObject = new JSONObject(sResultBiganData);
-        sResultLastData = String.valueOf(jsonObject.get("result"));
+        JSONObject bsTotalResult = new JSONObject(sResultBiganData);
+        sResultLastData = String.valueOf(bsTotalResult.get("result"));
 
-        jsonObject = new JSONObject(sResultLastData);
+        JSONObject bsfilterResult = new JSONObject(sResultLastData);
 
-        bsResultDataVO.setOpeningPrice(jsonObject.getString("o"));
-        bsResultDataVO.setClosingPrice(jsonObject.getString("c"));
-        bsResultDataVO.setHighPrice(jsonObject.getString("h"));
-        bsResultDataVO.setLowPrice(jsonObject.getString("l"));
+        bsResultDataVO.setOpeningPrice(bsfilterResult.getString("o"));
+        bsResultDataVO.setClosingPrice(bsfilterResult.getString("c"));
+        bsResultDataVO.setHighPrice(bsfilterResult.getString("h"));
+        bsResultDataVO.setLowPrice(bsfilterResult.getString("l"));
+        bsResultDataVO.setTradeVolume(bsfilterResult.getString("v"));
 
         // Get Mail (아이디 받아오기)
         sendURL = BT_COMM_URL + accountTail + "?nonce=" + nonce + "&api_key=" + BT_API_CODE;
-        Log.e("BitsonicInfo ", String.valueOf(nonce));
         btOpenConnector = new URL(sendURL);
         // HMAC SHA256
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
@@ -97,20 +96,20 @@ public class BitsonicInfo {
 
         sResultBiganData = btResultDatabufferedReader.lines().collect(Collectors.joining());
 
-        jsonObject = new JSONObject(sResultBiganData);
+        JSONObject bsTotalResultForId = new JSONObject(sResultBiganData);
 
-        sResultLastData = jsonObject.getString("return_code");
+        sResultLastData = bsTotalResultForId.getString("return_code");
 
         bsBCheckThreadFlag = true;
         if (sResultLastData.equals("1")) {
-          sResultLastData = jsonObject.getString("result");
+          sResultLastData = bsTotalResultForId.getString("result");
 
-          jsonObject = new JSONObject(sResultLastData);
-          bsResultDataVO.setId(jsonObject.getString("email"));
+          JSONObject bsFilterResultForId = new JSONObject(sResultLastData);
+          bsResultDataVO.setId(bsFilterResultForId.getString("email"));
           bsResultDataVO.setImg(R.drawable.bitsonic);
 
         } else {
-          Log.e("BitsonicInfo ", jsonObject.getString("return_code"));
+          Log.e("BitsonicInfo ", bsTotalResultForId.getString("return_code"));
         }
       } catch (Exception e) {
         e.printStackTrace();

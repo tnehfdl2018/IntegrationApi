@@ -1,5 +1,6 @@
 package com.soobineey.integrationapi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int count = 0;
+
     private ArrayList<DataVO> showDataArrayList;
     private boolean refreshFlag = false; // 첫 실행인지 refresh인지 구분하는 플래그
     private FloatingActionButton floatBtn;
@@ -22,13 +25,18 @@ public class MainActivity extends AppCompatActivity {
     private Adapter adapter;
 
     // 자동 갱신을 위한 handler
-    private Handler handler = new Handler();
+    private Handler autoRefreshHandler = new Handler();
+
+    // immortal service를 위한 intent
+    Intent intentForImmortal;
 
     private String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        intentForImmortal = new Intent(MainActivity.this, ImmortalService.class);
 
         // 버튼 생성 및 클릭 메소드 부여
         floatBtn = findViewById(R.id.float_refresh);
@@ -42,10 +50,9 @@ public class MainActivity extends AppCompatActivity {
         // 각 사이트 데이터를 가져오는 메소드
 //        bitsonicLookup();
 //        Log.e("TAG", "비트소닉 통과");
-        bithumbLookup();
         coinoneLookup();
         Log.e("TAG", "코인원 통과");
-
+        bithumbLookup();
         Log.e("TAG", "빗썸 통과");
 
         // 리사이클러뷰 생성
@@ -56,22 +63,23 @@ public class MainActivity extends AppCompatActivity {
         // adapter를 리사이클러뷰에 부착
         recyclerView.setAdapter(adapter);
 
-         AutoRefresh();
+        autoRefresh();
     }
 
     // 자동 갱신 메소드
-    public void AutoRefresh() {
+    public void autoRefresh() {
         refreshFlag = true;
 //        bitsonicLookup();
         coinoneLookup();
         bithumbLookup();
         Log.e(TAG, "Auto refresh");
+        Log.e(TAG, "Auto refresh 실행");
 
         adapter.notifyDataSetChanged();
-        handler.postDelayed(new Runnable() {
+        autoRefreshHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                AutoRefresh();
+                autoRefresh();
             }
         }, 10000);
     }
@@ -178,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     // 빗썸
     public void bithumbLookup() {
         // 데이터를 받아오기 위한 스레드 생성 및 실행
-        BithumbInfo.NetworkThread bithumbThread = new BithumbInfo.NetworkThread();
+        BithumbInfo.BithumbThread bithumbThread = new BithumbInfo.BithumbThread();
         bithumbThread.start();
 
         while (true) {
@@ -208,5 +216,78 @@ public class MainActivity extends AppCompatActivity {
             showDataArrayList.add(bithumbPutDataVO);
             Log.e(TAG, "애드임");
         }
+    }
+
+    // 메인 액티비티가 다시 시작되면 백그라운드에서 돌고 있던 service를 종료 시킨다.
+    @Override
+    public void onStart() {
+        super.onStart();
+        stopService(intentForImmortal);
+    }
+    // 메인 액티비티가 종료될 때 service를 호출하여 백그라운드 동작을 실행한다.
+    @Override
+    public void onStop(){
+        super.onStop();
+        startService(intentForImmortal);
+    }
+
+    public void forImmortal() {
+
+        coinoneLookupForShow();
+        bithumbLookupForShow();
+//        adapter.notifyDataSetChanged();
+        Log.e(TAG, "forImmotal");
+    }
+
+    // 코인원
+    public void coinoneLookupForShow() {
+
+        // 데이터를 받아오기 위한 스레드 생성 및 실행
+        CoinoneInfo.ConinoneThread coinoneThreadForShow = new CoinoneInfo.ConinoneThread();
+        coinoneThreadForShow.start();
+        // 스레드가 끝나기 전에 UI가 먼저 진행되어 데이터를 받아오기 전에 코드가 끝나버림을 방지
+        while (true) {
+            Log.v(TAG, "작동중");
+            if (coinoneThreadForShow.coBCheckThreadFlag) {
+                coinoneThreadForShow.coBCheckThreadFlag = false;
+                break;
+            }
+        }
+        Log.e("---------------------------", "------------------------------------");
+        count =+ 1;
+        Log.e("순서", String.valueOf(count));
+        Log.e("아이디 ",  coinoneThreadForShow.coResultDataVO.getId());
+        Log.e("시가 ", coinoneThreadForShow.coResultDataVO.getOpeningPrice());
+        Log.e("종가 ", coinoneThreadForShow.coResultDataVO.getClosingPrice());
+        Log.e("저가 ", coinoneThreadForShow.coResultDataVO.getLowPrice());
+        Log.e("고가 ", coinoneThreadForShow.coResultDataVO.getHighPrice());
+        Log.e("거래량 ", coinoneThreadForShow.coResultDataVO.getTradeVolume());
+        Log.e("겨래 대금 ", coinoneThreadForShow.coResultDataVO.getTradePrice());
+        Log.e("평균 거래가 ", coinoneThreadForShow.coResultDataVO.getAverage());
+    }
+
+    // 빗썸
+    public void bithumbLookupForShow() {
+        // 데이터를 받아오기 위한 스레드 생성 및 실행
+        BithumbInfo.BithumbThread bithumbThreadForShow = new BithumbInfo.BithumbThread();
+        bithumbThreadForShow.start();
+
+        while (true) {
+            Log.v(TAG, "작동중");
+            if (bithumbThreadForShow.bitBCheckThreadFlag) {
+                bithumbThreadForShow.bitBCheckThreadFlag = false;
+                break;
+            }
+        }
+
+        Log.e("순서", String.valueOf(count));
+        Log.e("아이디 ", bithumbThreadForShow.bitResultDataVO.getId());
+        Log.e("시가 ", bithumbThreadForShow.bitResultDataVO.getOpeningPrice());
+        Log.e("종가 ", bithumbThreadForShow.bitResultDataVO.getClosingPrice());
+        Log.e("저가 ", bithumbThreadForShow.bitResultDataVO.getLowPrice());
+        Log.e("고가 ", bithumbThreadForShow.bitResultDataVO.getHighPrice());
+        Log.e("거래량", bithumbThreadForShow.bitResultDataVO.getTradeVolume());
+        Log.e("거래 대금", bithumbThreadForShow.bitResultDataVO.getTradePrice());
+        Log.e("평균 거래가", bithumbThreadForShow.bitResultDataVO.getAverage());
     }
 }

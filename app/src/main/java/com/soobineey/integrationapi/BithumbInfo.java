@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class BithumbInfo {
 
-  static class NetworkThread extends Thread {
+  static class BithumbThread extends Thread {
     // 서버 연결용 데이터
     private String bitConnAPI = "1248a2005f5f17399578dd2db359f65f";
     private String bitConnSecretAPI = "308a0c99013c2b41219bc646238210fb";
@@ -42,10 +42,7 @@ public class BithumbInfo {
         HttpURLConnection bitHttpConn = (HttpURLConnection) url.openConnection();
         bitHttpConn.setRequestMethod("GET");
 
-        Log.e("빗썸", "데이터 조회");
-
         BufferedReader bitResultDataBufferedReader = new BufferedReader(new InputStreamReader(bitHttpConn.getInputStream()));
-        Log.e("빗썸 ", "가격정보");
 
         String priceInfomation = bitResultDataBufferedReader.readLine();
 
@@ -68,18 +65,10 @@ public class BithumbInfo {
 
         bitResultDataVO.setAverage(String.valueOf(bitTotalAverage));
 
-        Log.e("비트썸 ", bitTodayTotalVolume);
-        Log.e("비트썸 ", bitTodayTotalPrice);
-        Log.e("비트썸 ", String.valueOf(bitTotalAverage));
-
-
         String result = api_client.callApi("/info/account", bitHeader);
-        Log.e("빗썸", "데이터 조회");
 
         JSONObject bitIdInformaionObject = new JSONObject(result);
         JSONObject bitDataInIdInformation = bitIdInformaionObject.getJSONObject("data");
-
-        Log.e("코인원 ", "가격정보");
 
         bitResultDataVO.setId(bitDataInIdInformation.getString("account_id"));
 

@@ -28,7 +28,6 @@ public class CoinoneInfo {
     @Override
     public void run() {
       try {
-
         // Get Price
         String coUrlTail = "/ticker/";
         String coUrlParam = "?currency=redi";
