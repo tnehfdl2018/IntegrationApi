@@ -228,15 +228,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
+        autoRefreshHandler.removeMessages(0);
         startService(intentForImmortal);
     }
 
     public void forImmortal() {
-
         coinoneLookupForShow();
         bithumbLookupForShow();
-//        adapter.notifyDataSetChanged();
-        Log.e(TAG, "forImmotal");
     }
 
     // 코인원
@@ -254,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         Log.e("---------------------------", "------------------------------------");
-        count =+ 1;
         Log.e("순서", String.valueOf(count));
         Log.e("아이디 ",  coinoneThreadForShow.coResultDataVO.getId());
         Log.e("시가 ", coinoneThreadForShow.coResultDataVO.getOpeningPrice());

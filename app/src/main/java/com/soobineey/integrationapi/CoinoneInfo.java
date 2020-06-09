@@ -39,7 +39,6 @@ public class CoinoneInfo {
         coHttpConn.setRequestMethod("GET");
 
         BufferedReader coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
-        Log.e("코인원 ", "가격정보");
 
         String coSResultLastData = coResultDataBufferedReader.readLine();
 
@@ -66,10 +65,6 @@ public class CoinoneInfo {
 //        coResultDataVO.setAverage(testAverage);
         coResultDataVO.setAverage(String.valueOf(coTodayAverage));
 
-        Log.e("코인원 ", coTodayLastVolume);
-        Log.e("코인원 ", coTodayLastPrice);
-        Log.e("코인원 ", String.valueOf(coTodayAverage));
-
         // Get Mail
         coUrlTail = "/v1/account/user_info";
         coSendURL = CO_COMM_URL + coUrlTail + "?access_token=" + CONINONE_API_KEY;
@@ -79,7 +74,6 @@ public class CoinoneInfo {
         coHttpConn.setRequestMethod("GET");
 
         coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
-        Log.e("코인원 ", "아이디");
 
         coSResultLastData = coResultDataBufferedReader.readLine();
 
