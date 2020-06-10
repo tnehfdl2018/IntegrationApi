@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton floatBtn;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private Adapter adapter;
+    private Adapter recyclerVIewAdapter;
 
     // 자동 갱신을 위한 handler
     private Handler autoRefreshHandler = new Handler();
@@ -49,21 +49,21 @@ public class MainActivity extends AppCompatActivity {
         
         // 각 사이트 데이터를 가져오는 메소드
 //        bitsonicLookup();
-//        Log.e("TAG", "비트소닉 통과");
         coinoneLookup();
-        Log.e("TAG", "코인원 통과");
         bithumbLookup();
-        Log.e("TAG", "빗썸 통과");
 
         // 리사이클러뷰 생성
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new Adapter(showDataArrayList);
+        recyclerVIewAdapter = new Adapter(showDataArrayList);
         // adapter를 리사이클러뷰에 부착
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(recyclerVIewAdapter);
 
         autoRefresh();
+//        if (!refreshFlag) {
+//            autoRefresh();
+//        }
     }
 
     /**
@@ -76,9 +76,8 @@ public class MainActivity extends AppCompatActivity {
         coinoneLookup();
         bithumbLookup();
         Log.e(TAG, "Auto refresh");
-        Log.e(TAG, "Auto refresh 실행");
 
-        adapter.notifyDataSetChanged();
+        recyclerVIewAdapter.notifyDataSetChanged();
         autoRefreshHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             bithumbLookup();
             Log.e(TAG, "flaoting button refresh");
 
-            adapter.notifyDataSetChanged();
+            recyclerVIewAdapter.notifyDataSetChanged();
         }
     };
 
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
             swipeRefreshLayout.setRefreshing(false); // 로딩 빙글빙글 해제
 
-            adapter.notifyDataSetChanged();
+            recyclerVIewAdapter.notifyDataSetChanged();
         }
     };
 
@@ -144,13 +143,12 @@ public class MainActivity extends AppCompatActivity {
         bitsonicPutDataVO.setTradePrice(bitsonicThread.bsResultDataVO.getTradePrice());
         bitsonicPutDataVO.setAverage(bitsonicThread.bsResultDataVO.getAverage());
 
+        // 첫 실행시에는 add, 그다음부터 set
         if (refreshFlag) {
-            adapter.arrayList.set(0, bitsonicPutDataVO);
+            recyclerVIewAdapter.showDataArrayList.set(0, bitsonicPutDataVO);
 //            showDataArrayList.set(0, bitsonicPutDataVO);
-            Log.v(TAG, "셋임");
         } else {
             showDataArrayList.add(bitsonicPutDataVO);
-            Log.e(TAG, "애드임");
         }
     }
 
@@ -180,13 +178,12 @@ public class MainActivity extends AppCompatActivity {
 
         coinonePutDataVO.setAverage(coinoneThread.coResultDataVO.getAverage());
 
+        // 첫 실행시에는 add, 그다음부터 set
         if (refreshFlag) {
-            adapter.arrayList.set(0, coinonePutDataVO);
+            recyclerVIewAdapter.showDataArrayList.set(0, coinonePutDataVO);
 //            adapter.arrayList.set(1, coinonePutDataVO);
-            Log.e(TAG, "셋임");
         } else {
             showDataArrayList.add(coinonePutDataVO);
-            Log.e(TAG, "애드임");
         }
     }
 
@@ -215,13 +212,12 @@ public class MainActivity extends AppCompatActivity {
         bithumbPutDataVO.setTradePrice(bithumbThread.bitResultDataVO.getTradePrice());
         bithumbPutDataVO.setAverage(bithumbThread.bitResultDataVO.getAverage());
 
+        // 첫 실행시에는 add, 그다음부터 set
         if (refreshFlag) {
-            adapter.arrayList.set(1, bithumbPutDataVO);
+            recyclerVIewAdapter.showDataArrayList.set(1, bithumbPutDataVO);
 //            adapter.arrayList.set(2, bithumbPutDataVO);
-            Log.e(TAG, "셋임");
         } else {
             showDataArrayList.add(bithumbPutDataVO);
-            Log.e(TAG, "애드임");
         }
     }
 
@@ -233,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         stopService(intentForImmortal);
-        autoRefresh();
     }
     // 메인 액티비티가 종료될 때 service를 호출하여 백그라운드 동작을 실행한다.
     @Override
@@ -284,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-
         Log.e("빗썸", "서비스에서 데이터 받아오기");
         Log.e("아이디 ", bithumbThreadForShow.bitResultDataVO.getId());
         Log.e("시가 ", bithumbThreadForShow.bitResultDataVO.getOpeningPrice());

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    public ArrayList<DataVO> arrayList = new ArrayList();
+    public ArrayList<DataVO> showDataArrayList = new ArrayList();
     private Context context;
 
-    public Adapter(ArrayList<DataVO> arrayList) {
-        this.arrayList = arrayList;
+    public Adapter(ArrayList<DataVO> showDataArrayList) {
+        this.showDataArrayList = showDataArrayList;
     }
 
     @NonNull
@@ -27,9 +27,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = layoutInflater.inflate(R.layout.activity_custom_recycler_view, parent, false);
-        Adapter.ViewHolder adapter = new Adapter.ViewHolder(view);
+        Adapter.ViewHolder recyclerVIewAdapterViewHolder = new Adapter.ViewHolder(view);
 
-        return adapter;
+        return recyclerVIewAdapterViewHolder;
     }
 
     @Override
@@ -44,20 +44,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         TextView tradePrice = holder.itemView.findViewById(R.id.insert_trade_price);
         TextView averagePrice = holder.itemView.findViewById(R.id.insert_average_price);
 
-        image.setImageDrawable(context.getDrawable(arrayList.get(position).getImg()));
-        id.setText(arrayList.get(position).getId());
-        openingPrice.setText(arrayList.get(position).getOpeningPrice());
-        closingPrice.setText(arrayList.get(position).getClosingPrice());
-        lowPrice.setText(arrayList.get(position).getLowPrice());
-        highPrice.setText(arrayList.get(position).getHighPrice());
-        tradeVolume.setText(arrayList.get(position).getTradeVolume());
-        tradePrice.setText(arrayList.get(position).getTradePrice());
-        averagePrice.setText(arrayList.get(position).getAverage());
+        image.setImageDrawable(context.getDrawable(showDataArrayList.get(position).getImg()));
+        id.setText(showDataArrayList.get(position).getId());
+        openingPrice.setText(showDataArrayList.get(position).getOpeningPrice());
+        closingPrice.setText(showDataArrayList.get(position).getClosingPrice());
+        lowPrice.setText(showDataArrayList.get(position).getLowPrice());
+        highPrice.setText(showDataArrayList.get(position).getHighPrice());
+        tradeVolume.setText(showDataArrayList.get(position).getTradeVolume());
+        tradePrice.setText(showDataArrayList.get(position).getTradePrice());
+        averagePrice.setText(showDataArrayList.get(position).getAverage());
     }
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return showDataArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

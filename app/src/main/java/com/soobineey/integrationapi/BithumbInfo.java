@@ -15,7 +15,6 @@ public class BithumbInfo {
     private String bitConnAPI = "1248a2005f5f17399578dd2db359f65f";
     private String bitConnSecretAPI = "308a0c99013c2b41219bc646238210fb";
     private HashMap<String, String> bitHeader;
-    private URL url;
     private Api_Client api_client;
 
     // 스레드가 끝났는지 끝나지 않았는지 판단하는 플래그 (진행중 - false, 종료 - true)
@@ -36,9 +35,9 @@ public class BithumbInfo {
       String priceAPI = "https://api.bithumb.com/public/ticker/VET_KRW";
 
       try {
-        url = new URL(priceAPI);
+        URL connUrl = new URL(priceAPI);
 
-        HttpURLConnection bitHttpConn = (HttpURLConnection) url.openConnection();
+        HttpURLConnection bitHttpConn = (HttpURLConnection) connUrl.openConnection();
         bitHttpConn.setRequestMethod("GET");
 
         BufferedReader bitResultDataBufferedReader = new BufferedReader(new InputStreamReader(bitHttpConn.getInputStream()));
@@ -64,9 +63,9 @@ public class BithumbInfo {
 
         bitResultDataVO.setAverage(String.valueOf(bitTotalAverage));
 
-        String result = api_client.callApi("/info/account", bitHeader);
+        String bitSResultIdData = api_client.callApi("/info/account", bitHeader);
 
-        JSONObject bitIdInformaionObject = new JSONObject(result);
+        JSONObject bitIdInformaionObject = new JSONObject(bitSResultIdData);
         JSONObject bitDataInIdInformation = bitIdInformaionObject.getJSONObject("data");
 
         bitResultDataVO.setId(bitDataInIdInformation.getString("account_id"));

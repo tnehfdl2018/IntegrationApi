@@ -38,19 +38,19 @@ public class CoinoneInfo {
 
         BufferedReader coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
 
-        String coSResultLastData = coResultDataBufferedReader.readLine();
+        String coSResultData = coResultDataBufferedReader.readLine();
 
-        JSONObject jsonObject = new JSONObject(coSResultLastData);
+        JSONObject coJsonResultData = new JSONObject(coSResultData);
 
 
-        coResultDataVO.setOpeningPrice(jsonObject.getString("first"));
-        coResultDataVO.setClosingPrice(jsonObject.getString("last"));
-        coResultDataVO.setHighPrice(jsonObject.getString("high"));
-        coResultDataVO.setLowPrice(jsonObject.getString("low"));
+        coResultDataVO.setOpeningPrice(coJsonResultData.getString("first"));
+        coResultDataVO.setClosingPrice(coJsonResultData.getString("last"));
+        coResultDataVO.setHighPrice(coJsonResultData.getString("high"));
+        coResultDataVO.setLowPrice(coJsonResultData.getString("low"));
 
-        String coSTodayLastVolume = jsonObject.getString("volume"); // 거래량
-        String coSHigh = jsonObject.getString("high"); // 고가
-        String coSLow = jsonObject.getString("low"); // 저가
+        String coSTodayLastVolume = coJsonResultData.getString("volume"); // 거래량
+        String coSHigh = coJsonResultData.getString("high"); // 고가
+        String coSLow = coJsonResultData.getString("low"); // 저가
         // 평균단가 계산
         Double coDTotalPrice = Double.valueOf(coSHigh) + Double.valueOf(coSLow);
         String coSTotalPrice = String.valueOf(coDTotalPrice / 2);
@@ -73,14 +73,14 @@ public class CoinoneInfo {
 
         coResultDataBufferedReader = new BufferedReader(new InputStreamReader(coHttpConn.getInputStream()));
 
-        coSResultLastData = coResultDataBufferedReader.readLine();
+        String coSResultIdData = coResultDataBufferedReader.readLine();
 
         // 단계별로 구분 되어있는 json형태에서 id까지 찾아 들어간다.
-        jsonObject = new JSONObject(coSResultLastData);
-        String userInfo = jsonObject.getString("userInfo");
+        JSONObject coJsonResultIdData = new JSONObject(coSResultIdData);
+        String userInfo = coJsonResultIdData.getString("userInfo");
 
-        jsonObject = new JSONObject(userInfo);
-        String emailInfo = jsonObject.getString("emailInfo");
+        coJsonResultIdData = new JSONObject(userInfo);
+        String emailInfo = coJsonResultIdData.getString("emailInfo");
 
         JSONObject emailObject = new JSONObject(emailInfo);
 
