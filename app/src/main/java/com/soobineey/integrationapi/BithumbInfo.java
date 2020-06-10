@@ -12,25 +12,23 @@ public class BithumbInfo {
 
   static class BithumbThread extends Thread {
     // 서버 연결용 데이터
-    private String bitConnAPI = "1248a2005f5f17399578dd2db359f65f";
-    private String bitConnSecretAPI = "308a0c99013c2b41219bc646238210fb";
-    private HashMap<String, String> bitHeader;
-    private Api_Client api_client;
+    final private String bitConnAPI = "1248a2005f5f17399578dd2db359f65f";
+    final private String bitConnSecretAPI = "308a0c99013c2b41219bc646238210fb";
 
     // 스레드가 끝났는지 끝나지 않았는지 판단하는 플래그 (진행중 - false, 종료 - true)
     public boolean bitBCheckThreadFlag = false;
 
     // 받아온 데이터 저장할 VO
-    public DataVO bitResultDataVO = new DataVO();
+    protected DataVO bitResultDataVO = new DataVO();
 
     @Override
     public void run() {
 
-      bitHeader = new HashMap<String, String>();
-      bitHeader.put("order_currency", "VET");
-      bitHeader.put("payment_currency", "KRW");
+      HashMap<String, String> headerCurrency = new HashMap<String, String>();
+      headerCurrency.put("order_currency", "VET");
+      headerCurrency.put("payment_currency", "KRW");
 
-      api_client = new Api_Client(bitConnAPI, bitConnSecretAPI);
+      Api_Client api_client = new Api_Client(bitConnAPI, bitConnSecretAPI);
 
       String priceAPI = "https://api.bithumb.com/public/ticker/VET_KRW";
 
@@ -63,7 +61,7 @@ public class BithumbInfo {
 
         bitResultDataVO.setAverage(String.valueOf(bitTotalAverage));
 
-        String bitSResultIdData = api_client.callApi("/info/account", bitHeader);
+        String bitSResultIdData = api_client.callApi("/info/account", headerCurrency);
 
         JSONObject bitIdInformaionObject = new JSONObject(bitSResultIdData);
         JSONObject bitDataInIdInformation = bitIdInformaionObject.getJSONObject("data");

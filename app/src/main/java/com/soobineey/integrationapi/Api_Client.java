@@ -1,5 +1,6 @@
 package com.soobineey.integrationapi;
 
+import android.util.Log;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -77,43 +78,47 @@ public class Api_Client {
     return new String(Base64.encodeBase64(bytes));
   }
 
-  private String usecTime() {
-    return String.valueOf(System.currentTimeMillis());
-  }
+  /**
+   *
+   * @param apiHost 주소
+   * @param apiMethod 호출 메소드
+   * @param currency 주문통화, 결제통화, endpoint
+   * @param httpHeaders 호출시 헤더값 (endpoint, headerParams, api_key, api_secret)
+   * @return
+   */
 
-  private String request(String strHost, String strMemod, HashMap<String, String> rgParams, HashMap<String, String> httpHeaders) {
+  private String request(String apiHost, String apiMethod, HashMap<String, String> currency, HashMap<String, String> httpHeaders) {
     String response = "";
 
-    // SSL ����
-    if (strHost.startsWith("https://")) {
-      HttpRequest request = HttpRequest.get(strHost);
+    // apiHost의 첫 시작이 https://로 시작하면 메소드는 get으로 설정
+    if (apiHost.startsWith("https://")) {
+      HttpRequest request = HttpRequest.get(apiHost);
       // Accept all certificates
       request.trustAllCerts();
       // Accept all hostnames
       request.trustAllHosts();
     }
 
-    if (strMemod.toUpperCase().equals("HEAD")) {
+    if (apiMethod.toUpperCase().equals("HEAD")) {
     } else {
+      // 메소드가 HEAD가 아니라면 request 초기화
       HttpRequest request = null;
 
+      if (apiMethod.toUpperCase().equals("POST")) {
 
-      if (strMemod.toUpperCase().equals("POST")) {
-
-        request = new HttpRequest(strHost, "POST");
+        request = new HttpRequest(apiHost, "POST");
         request.readTimeout(10000);
 
         if (httpHeaders != null && !httpHeaders.isEmpty()) {
           httpHeaders.put("api-client-type", "2");
-          request.headers(httpHeaders);
+          request.headers(httpHeaders); // 전송할 수 있는 헤더 값으로 만들기
           System.out.println(httpHeaders.toString());
         }
-        if (rgParams != null && !rgParams.isEmpty()) {
-          request.form(rgParams);
+        if (currency != null && !currency.isEmpty()) {
+          request.form(currency);
         }
       } else {
-        request = HttpRequest.get(strHost
-            + Util.mapToQueryString(rgParams));
+        request = HttpRequest.get(apiHost + Util.mapToQueryString(currency));
         request.readTimeout(10000);
       }
 
@@ -128,55 +133,64 @@ public class Api_Client {
     return response;
   }
 
-  private HashMap<String, String> getHttpHeaders(String endpoint, HashMap<String, String> rgData, String apiKey, String apiSecret) {
+  private HashMap<String, String> getHttpHeaders(String endpoint, HashMap<String, String> headerParams, String apiKey, String apiSecret) {
 
-    String strData = Util.mapToQueryString(rgData).replace("?", "");
-    String nNonce = usecTime();
+    // url의 파라미터 형태로 만든다. ex) ?aaa=aa&bbb=bb
+    String urlParameter = Util.mapToQueryString(headerParams).replace("?", "");
+    String nNonce = String.valueOf(System.currentTimeMillis()); // 요청 시간
 
-    strData = strData.substring(0, strData.length() - 1);
+    urlParameter = urlParameter.substring(0, urlParameter.length() - 1);
 
+    urlParameter = encodeURIComponent(urlParameter);
 
-    System.out.println("1 : " + strData);
-
-    strData = encodeURIComponent(strData);
-
-    HashMap<String, String> array = new HashMap<String, String>();
+    HashMap<String, String> headerArray = new HashMap<String, String>();
 
 
-    String str = endpoint + ";" + strData + ";" + nNonce;
+    String urlParams = endpoint + ";" + urlParameter + ";" + nNonce;
 
-    String encoded = asHex(hmacSha512(str, apiSecret));
+    String encryptionStr = asHex(hmacSha512(urlParams, apiSecret));
 
-    System.out.println("strData was: " + str);
-    System.out.println("apiSecret was: " + apiSecret);
-    array.put("Api-Key", apiKey);
-    array.put("Api-Sign", encoded);
-    array.put("Api-Nonce", nNonce);
+    Log.e("Api_Client endcoded ", encryptionStr);
 
-    return array;
+    headerArray.put("Api-Key", apiKey);
+    headerArray.put("Api-Sign", encryptionStr);
+    headerArray.put("Api-Nonce", nNonce);
+
+    return headerArray;
 
   }
 
+  /**
+   *
+   * @param endpoint
+   * @param params headerCurrency
+   * @return
+   */
+  /**
+   *
+   * headerCurrency
+   * order_currency : VET
+   * payment_currency : KRW
+   * endpoint : /info/account
+   */
   @SuppressWarnings("unchecked")
   public String callApi(String endpoint, HashMap<String, String> params) {
     String rgResultDecode = "";
-    HashMap<String, String> rgParams = new HashMap<String, String>();
-    rgParams.put("endpoint", endpoint);
+    HashMap<String, String> headerParams = new HashMap<String, String>();
+    headerParams.put("endpoint", endpoint);
 
     if (params != null) {
-      rgParams.putAll(params);
+      headerParams.putAll(params);
     }
 
     String api_host = api_url + endpoint;
-    HashMap<String, String> httpHeaders = getHttpHeaders(endpoint, rgParams, api_key, api_secret);
+    HashMap<String, String> httpHeaders = getHttpHeaders(endpoint, headerParams, api_key, api_secret);
 
-    rgResultDecode = request(api_host, "POST", rgParams, httpHeaders);
+    rgResultDecode = request(api_host, "POST", headerParams, httpHeaders);
 
     if (!rgResultDecode.startsWith("error")) {
-      // json �Ľ�
-      HashMap<String, String> result;
       try {
-        result = new ObjectMapper().readValue(rgResultDecode, HashMap.class);
+        HashMap<String, String> result = new ObjectMapper().readValue(rgResultDecode, HashMap.class);
       } catch (IOException e) {
         e.printStackTrace();
       }

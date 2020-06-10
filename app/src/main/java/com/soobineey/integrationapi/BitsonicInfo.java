@@ -19,13 +19,11 @@ public class BitsonicInfo {
   static class BitsonicThread extends Thread {
 
     // 서버 연결용 데이터
-    private String BT_COMM_URL = "https://open-api.bitsonic.co.kr";
-    private String BT_API_CODE = "e113c5d1a063a33805018f0e862003a534c2c5d538584c6adc9ebbc48be68555";
-    private String SYMBOL_PARAMS = "btckrw";
-    private URL btOpenConnector = null;
+    final private String BT_COMM_URL = "https://open-api.bitsonic.co.kr";
+    final private String BT_API_CODE = "e113c5d1a063a33805018f0e862003a534c2c5d538584c6adc9ebbc48be68555";
+    final private String SYMBOL_PARAMS = "btckrw";
     private HttpURLConnection btHttpUrlConn;
     private BufferedReader btResultDatabufferedReader;
-    private String sendURL;
 
     // 스레드가 끝났는지 끝나지 않았는지 판단하는 플래그 (진행중 - false, 종료 - true)
     public boolean bsBCheckThreadFlag = false;
@@ -43,7 +41,7 @@ public class BitsonicInfo {
 
       // 가격 정보를 받아오기 위한 url 생성
       String sendUrlTail = "/api/v1/ticker/24hr";
-      sendURL = BT_COMM_URL + sendUrlTail + "?symbol=" + SYMBOL_PARAMS + "&api_key=" + BT_API_CODE;
+      String sendURL = BT_COMM_URL + sendUrlTail + "?symbol=" + SYMBOL_PARAMS + "&api_key=" + BT_API_CODE;
 
       // 아이디 정보를 받아오기 위한 url 생성
       String accountTail = "/api/v1/account";
@@ -56,7 +54,7 @@ public class BitsonicInfo {
 
       try {
         // 가격정보 받아오기
-        btOpenConnector = new URL(sendURL);
+        URL btOpenConnector = new URL(sendURL);
 
         btHttpUrlConn = (HttpURLConnection) btOpenConnector.openConnection();
         btHttpUrlConn.setRequestMethod("GET");

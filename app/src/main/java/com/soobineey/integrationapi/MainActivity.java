@@ -15,11 +15,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int count = 0;
-
     private ArrayList<DataVO> showDataArrayList;
     private boolean refreshFlag = false; // 첫 실행인지 refresh인지 구분하는 플래그
-    private FloatingActionButton floatBtn;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private Adapter recyclerVIewAdapter;
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         intentForImmortal = new Intent(MainActivity.this, ImmortalService.class);
 
         // 버튼 생성 및 클릭 메소드 부여
-        floatBtn = findViewById(R.id.float_refresh);
+        FloatingActionButton floatBtn = findViewById(R.id.float_refresh);
         floatBtn.setOnClickListener(clickRefresh);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(swipeRefresh);
@@ -61,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerVIewAdapter);
 
         autoRefresh();
-//        if (!refreshFlag) {
-//            autoRefresh();
-//        }
     }
 
     /**
@@ -109,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
             coinoneLookup();
             bithumbLookup();
             Log.e(TAG, "swipe refresh");
-
             swipeRefreshLayout.setRefreshing(false); // 로딩 빙글빙글 해제
 
             recyclerVIewAdapter.notifyDataSetChanged();
