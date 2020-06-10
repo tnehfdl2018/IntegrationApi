@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class BithumbInfo {
         bitResultDataVO.setTradeVolume(String.format("%.2f", Double.valueOf(bitTodayTotalVolume)));
         bitResultDataVO.setTradePrice(String.format("%.2f", Double.valueOf(bitTodayTotalPrice)));
 
-        Double bitTotalAverage = Double.valueOf(bitTodayTotalPrice) / Double.valueOf(bitTodayTotalVolume);
+        BigDecimal bitTotalAverage = BigDecimal.valueOf(Double.valueOf(bitTodayTotalPrice)).divide(BigDecimal.valueOf(Double.valueOf(bitTodayTotalVolume)), BigDecimal.ROUND_HALF_UP);
 
         bitResultDataVO.setAverage(String.valueOf(bitTotalAverage));
 

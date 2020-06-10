@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -51,15 +52,17 @@ public class CoinoneInfo {
         String coSTodayLastVolume = coJsonResultData.getString("volume"); // 거래량
         String coSHigh = coJsonResultData.getString("high"); // 고가
         String coSLow = coJsonResultData.getString("low"); // 저가
+
         // 평균단가 계산
-        Double coDTotalPrice = Double.valueOf(coSHigh) + Double.valueOf(coSLow);
-        String coSTotalPrice = String.valueOf(coDTotalPrice / 2);
+        BigDecimal coDTotalPrice = BigDecimal.valueOf(Double.valueOf(coSHigh)).add(BigDecimal.valueOf(Double.valueOf(coSLow)));
+
+        String coSTotalPrice = String.valueOf(coDTotalPrice.divide(BigDecimal.valueOf(2), BigDecimal.ROUND_HALF_UP));
         
         // 거래대금 계산
-        String coSTradePrice = String.valueOf(Double.valueOf(coSTotalPrice) * Double.valueOf(coSTodayLastVolume));
+        String coSTradePrice = String.valueOf(BigDecimal.valueOf(Double.valueOf(coSTotalPrice)).multiply(BigDecimal.valueOf(Double.valueOf(coSTodayLastVolume))));
 
-        coResultDataVO.setTradePrice(String.format("%.2f", Double.valueOf(coSTradePrice)));
-        coResultDataVO.setTradeVolume(String.format("%.2f", Double.valueOf(coSTodayLastVolume)));
+        coResultDataVO.setTradePrice(String.format("%.2f", BigDecimal.valueOf(Double.valueOf(coSTradePrice))));
+        coResultDataVO.setTradeVolume(String.format("%.2f", BigDecimal.valueOf(Double.valueOf(coSTodayLastVolume))));
 
         coResultDataVO.setAverage(coSTotalPrice);
 

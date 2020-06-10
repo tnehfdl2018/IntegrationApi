@@ -150,8 +150,6 @@ public class Api_Client {
 
     String encryptionStr = asHex(hmacSha512(urlParams, apiSecret));
 
-    Log.e("Api_Client endcoded ", encryptionStr);
-
     headerArray.put("Api-Key", apiKey);
     headerArray.put("Api-Sign", encryptionStr);
     headerArray.put("Api-Nonce", nNonce);
