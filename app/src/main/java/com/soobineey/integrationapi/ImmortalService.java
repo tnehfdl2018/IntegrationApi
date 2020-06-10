@@ -2,18 +2,13 @@ package com.soobineey.integrationapi;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class ImmortalService extends Service {
   private boolean ckRestartFlag = false;
 
   private MainActivity mainActivity = new MainActivity();
-
-  private Handler handler = new Handler();
-
 
   @Nullable
   @Override
@@ -37,6 +32,7 @@ public class ImmortalService extends Service {
     return super.onStartCommand(intent, flag, startId);
   }
 
+  // 다시 앱이 실행 되면 flag를 true로 바꿔 아래 메소드를 빠져 나가도록 한다.
   @Override
   public void onDestroy() {
     super.onDestroy();
@@ -50,7 +46,9 @@ public class ImmortalService extends Service {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      mainActivity.forImmortal();
+      mainActivity.coinoneLookupForShow();
+      mainActivity.bithumbLookupForShow();
+
       if (ckRestartFlag) break;
     }
 

@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         autoRefresh();
     }
 
+    /**
+     * 갱신 메소드 (자동갱신, 플로팅버튼 갱신, 스와이프 갱신)
+     */
     // 자동 갱신 메소드
     public void autoRefresh() {
         refreshFlag = true;
@@ -114,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 각 거래소에서 데이터를 받아오는 메소드
+     */
     // 비트소닉
     public void bitsonicLookup() {
         // 데이터를 받아오기 위한 스레드 생성 및 실행
@@ -171,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         coinonePutDataVO.setHighPrice(coinoneThread.coResultDataVO.getHighPrice());
         coinonePutDataVO.setTradeVolume(coinoneThread.coResultDataVO.getTradeVolume());
         coinonePutDataVO.setTradePrice(coinoneThread.coResultDataVO.getTradePrice());
+
         coinonePutDataVO.setAverage(coinoneThread.coResultDataVO.getAverage());
 
         if (refreshFlag) {
@@ -218,11 +225,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 서비스 실행 및 종료
+     */
     // 메인 액티비티가 다시 시작되면 백그라운드에서 돌고 있던 service를 종료 시킨다.
     @Override
     public void onStart() {
         super.onStart();
         stopService(intentForImmortal);
+        autoRefresh();
     }
     // 메인 액티비티가 종료될 때 service를 호출하여 백그라운드 동작을 실행한다.
     @Override
@@ -232,11 +243,9 @@ public class MainActivity extends AppCompatActivity {
         startService(intentForImmortal);
     }
 
-    public void forImmortal() {
-        coinoneLookupForShow();
-        bithumbLookupForShow();
-    }
-
+    /**
+     * 서비스의 동작을 확인하기 위하여 로그를 찍어주기위한 메소드
+     */
     // 코인원
     public void coinoneLookupForShow() {
 
@@ -251,8 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        Log.e("---------------------------", "------------------------------------");
-        Log.e("순서", String.valueOf(count));
+        Log.e("코인원", "서비스에서 데이터 받아오기");
         Log.e("아이디 ",  coinoneThreadForShow.coResultDataVO.getId());
         Log.e("시가 ", coinoneThreadForShow.coResultDataVO.getOpeningPrice());
         Log.e("종가 ", coinoneThreadForShow.coResultDataVO.getClosingPrice());
@@ -277,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Log.e("순서", String.valueOf(count));
+        Log.e("빗썸", "서비스에서 데이터 받아오기");
         Log.e("아이디 ", bithumbThreadForShow.bitResultDataVO.getId());
         Log.e("시가 ", bithumbThreadForShow.bitResultDataVO.getOpeningPrice());
         Log.e("종가 ", bithumbThreadForShow.bitResultDataVO.getClosingPrice());

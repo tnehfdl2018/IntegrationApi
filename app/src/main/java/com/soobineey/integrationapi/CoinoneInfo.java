@@ -1,6 +1,5 @@
 package com.soobineey.integrationapi;
 
-import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -49,20 +48,20 @@ public class CoinoneInfo {
         coResultDataVO.setHighPrice(jsonObject.getString("high"));
         coResultDataVO.setLowPrice(jsonObject.getString("low"));
 
-        String coTodayLastPrice = jsonObject.getString("last");
-        String coTodayLastVolume = jsonObject.getString("volume");
+        String coSTodayLastVolume = jsonObject.getString("volume"); // 거래량
+        String coSHigh = jsonObject.getString("high"); // 고가
+        String coSLow = jsonObject.getString("low"); // 저가
+        // 평균단가 계산
+        Double coDTotalPrice = Double.valueOf(coSHigh) + Double.valueOf(coSLow);
+        String coSTotalPrice = String.valueOf(coDTotalPrice / 2);
+        
+        // 거래대금 계산
+        String coSTradePrice = String.valueOf(Double.valueOf(coSTotalPrice) * Double.valueOf(coSTodayLastVolume));
 
-        String coSTodayLastPrice = String.format("%.2f", Double.valueOf(coTodayLastPrice));
-        String coSodayLastPrice = String.format("%.2f", Double.valueOf(coTodayLastVolume));
+        coResultDataVO.setTradePrice(String.format("%.2f", Double.valueOf(coSTradePrice)));
+        coResultDataVO.setTradeVolume(String.format("%.2f", Double.valueOf(coSTodayLastVolume)));
 
-        coResultDataVO.setTradePrice(coSTodayLastPrice);
-        coResultDataVO.setTradeVolume(coSodayLastPrice);
-
-        Double coTodayAverage = Double.valueOf(coTodayLastPrice) / Double.valueOf(coTodayLastVolume);
-
-//        String testAverage = String.valueOf(Math.round(coTodayAverage *100) / 100.0);
-//        coResultDataVO.setAverage(testAverage);
-        coResultDataVO.setAverage(String.valueOf(coTodayAverage));
+        coResultDataVO.setAverage(coSTotalPrice);
 
         // Get Mail
         coUrlTail = "/v1/account/user_info";
